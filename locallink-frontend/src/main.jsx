@@ -1,3 +1,5 @@
+
+
 import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App.jsx";
@@ -21,6 +23,9 @@ const config = {
     tokenEndpoint: "https://api.asgardeo.io/t/orgshzcc/oauth2/token",
     endSessionEndpoint: "https://api.asgardeo.io/t/orgshzcc/oidc/logout"
   }
+  ,
+
+  
 };
 
 ReactDOM.createRoot(document.getElementById("root")).render(

@@ -1,3 +1,10 @@
+import jwt from "jsonwebtoken";
+import dotenv from "dotenv";
+
+dotenv.config();
+
+const SECRET = process.env.JWT_SECRET || "oshi2000";
+
 export const authenticate = (req, res, next) => {
   const authHeader = req.headers.authorization;
   if (!authHeader) {
@@ -24,3 +31,27 @@ export const authenticate = (req, res, next) => {
     return res.status(403).json({ message: "Invalid token" });
   }
 };
+
+// ✅ Add this named export
+export const authorize = (allowedRoles = []) => {
+  return (req, res, next) => {
+    if (!req.user?.roles) {
+      return res.status(403).json({ message: "No roles assigned" });
+    }
+
+    const normalizedAllowed = allowedRoles.map(r => r.toLowerCase());
+    const hasPermission = req.user.roles.some(role =>
+      normalizedAllowed.includes(role)
+    );
+
+    if (!hasPermission) {
+      return res.status(403).json({
+        message: `Required roles: ${allowedRoles.join(", ")}`
+      });
+    }
+
+    next();
+  };
+};
+
+
