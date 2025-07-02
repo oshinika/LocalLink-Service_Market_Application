@@ -64,14 +64,14 @@ const AppLayout = () => {
 
   return (
     <div className="flex h-screen w-screen overflow-hidden bg-gray-50">
-      {/* Slim, professional sidebar */}
+      
       <aside
         className={`${
           collapsed ? "w-16" : "w-56"
         } bg-white border-r border-gray-200 flex flex-col justify-between transition-all duration-300 shadow-sm`}
       >
         <div>
-          {/* Logo/Toggle area */}
+          
           <div className="flex justify-between items-center p-4 border-b border-gray-100">
             {!collapsed && (
               <div className="text-lg font-semibold text-blue-600">LocalLink</div>
@@ -84,7 +84,7 @@ const AppLayout = () => {
             </button>
           </div>
 
-          {/* Navigation */}
+          
           <nav className="flex flex-col p-2 gap-1">
             <Link 
               to="/home" 
@@ -130,7 +130,7 @@ const AppLayout = () => {
           </nav>
         </div>
 
-        {/* Footer */}
+        
         <div className="p-3 border-t border-gray-100">
           <button
             onClick={() => signOut()}
@@ -147,7 +147,7 @@ const AppLayout = () => {
         </div>
       </aside>
 
-      {/* Main content area */}
+      
       <div className="flex flex-col flex-1 overflow-hidden">
         <header className="bg-white border-b border-gray-200 px-6 py-4 flex justify-between items-center shadow-sm">
           <h1 className="text-lg font-semibold text-gray-800">{getHeaderTitle()}</h1>

@@ -1,5 +1,3 @@
-
-
 import express from "express";
 import multer from "multer";
 import path from "path";
@@ -14,7 +12,7 @@ import {
 
 const router = express.Router();
 
-// Setup multer storage
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 

@@ -1,124 +1,81 @@
+
 import { useAuthContext } from "@asgardeo/auth-react";
 import { useEffect, useState } from "react";
 
-function EditProfile() {
-  const { httpRequest } = useAuthContext();
-
-  const [user, setUser] = useState({});
-  const [userId, setUserId] = useState("");
-  const [loading, setLoading] = useState(true);
+function EditProfilePage() {
+  const { getAccessToken, getDecodedIDToken, state } = useAuthContext();
+  const [form, setForm] = useState({
+    givenName: "",
+    familyName: "",
+  });
+  const [saving, setSaving] = useState(false);
 
   useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const res = await httpRequest({
-          url: `${import.meta.env.VITE_ASGARDEO_BASE_URL}/scim2/Me`,
-          method: "GET",
-          headers: {
-            Accept: "application/scim+json",
-          },
-        });
-
-        setUser({
-          firstName: res.data.name?.givenName || "",
-          lastName: res.data.name?.familyName || "",
-          phone: res.data.phoneNumbers?.[0]?.value || "",
-        });
-        setUserId(res.data.id);
-      } catch (err) {
-        console.error("Failed to fetch user:", err);
-      } finally {
-        setLoading(false);
-      }
+    const fetchProfile = async () => {
+      const token = await getDecodedIDToken();
+      setForm({
+        givenName: token?.given_name || "",
+        familyName: token?.family_name || "",
+      });
     };
 
-    fetchUser();
-  }, []);
+    if (state.isAuthenticated) {
+      fetchProfile();
+    }
+  }, [state.isAuthenticated]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setSaving(true);
+
     try {
-      await httpRequest({
-        url: `${import.meta.env.VITE_ASGARDEO_BASE_URL}/scim2/Users/${userId}`,
+      const accessToken = await getAccessToken();
+
+      const res = await fetch("http://localhost:5000/api/profile/update", {
         method: "PATCH",
         headers: {
-          "Content-Type": "application/scim+json",
+          Authorization: `Bearer ${accessToken}`,
+          "Content-Type": "application/json",
         },
-        data: {
-          Operations: [
-            {
-              op: "replace",
-              value: {
-                name: {
-                  givenName: user.firstName,
-                  familyName: user.lastName,
-                },
-                phoneNumbers: [
-                  {
-                    type: "mobile",
-                    value: user.phone,
-                  },
-                ],
-              },
-            },
-          ],
-          schemas: ["urn:ietf:params:scim:api:messages:2.0:PatchOp"],
-        },
+        body: JSON.stringify(form),
       });
-      alert("Profile updated successfully!");
+
+      if (!res.ok) throw new Error("Profile update failed");
+
+      alert("✅ Profile updated successfully");
     } catch (err) {
-      console.error("Update failed:", err);
-      alert("Update failed.");
+      console.error("❌ Error updating profile:", err);
+      alert("Update failed. See console for details.");
+    } finally {
+      setSaving(false);
     }
   };
 
-  if (loading) {
-    return <div className="p-10 text-center">Loading...</div>;
-  }
-
   return (
-    <div className="max-w-xl mx-auto mt-10 bg-white p-8 rounded-xl shadow-md">
-      <h2 className="text-xl font-bold mb-6">Edit Profile</h2>
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div>
-          <label className="block text-sm font-medium text-gray-600">First Name</label>
-          <input
-            type="text"
-            value={user.firstName}
-            onChange={(e) => setUser({ ...user, firstName: e.target.value })}
-            className="w-full border px-3 py-2 rounded"
-          />
-        </div>
-
-        <div>
-          <label className="block text-sm font-medium text-gray-600">Last Name</label>
-          <input
-            type="text"
-            value={user.lastName}
-            onChange={(e) => setUser({ ...user, lastName: e.target.value })}
-            className="w-full border px-3 py-2 rounded"
-          />
-        </div>
-
-        <div>
-          <label className="block text-sm font-medium text-gray-600">Phone</label>
-          <input
-            type="text"
-            value={user.phone}
-            onChange={(e) => setUser({ ...user, phone: e.target.value })}
-            className="w-full border px-3 py-2 rounded"
-          />
-        </div>
-
+    <div className="max-w-xl mx-auto mt-10 p-6 bg-white shadow rounded">
+      <h2 className="text-2xl font-bold mb-4">Edit Your Profile</h2>
+      <form onSubmit={handleSubmit}>
+        {["givenName", "familyName"].map((field) => (
+          <div key={field} className="mb-4">
+            <label className="block mb-1 capitalize">{field}</label>
+            <input
+              type="text"
+              value={form[field]}
+              onChange={(e) => setForm({ ...form, [field]: e.target.value })}
+              className="w-full border px-3 py-2 rounded"
+            />
+          </div>
+        ))}
         <button
           type="submit"
-          className="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700"
+          disabled={saving}
+          className="bg-blue-600 text-white px-4 py-2 rounded"
         >
-          Save Changes
+          {saving ? "Saving..." : "Update Profile"}
         </button>
       </form>
     </div>
   );
 }
 
-export default EditProfile;
+export default EditProfilePage;

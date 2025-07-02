@@ -46,6 +46,7 @@ import LoginPage from "./pages/LoginPage";
 import AppLayout from "./components/AppLayout";
 import AdminUsersPage from "./pages/AdminUsersPage";
 import EditProfile from "./pages/EditProfile";
+import RoleSelectionPage from "./pages/RoleSelectionPage";
 
 
 function App() {
@@ -82,7 +83,7 @@ function App() {
         if (foundRoles.length === 0) {
           try {
             const response = await httpRequest({
-              url: `${import.meta.env.VITE_ASGARDEO_BASE_URL}/scim2/Me`,
+              url: `${import.meta.env.ASGARDEO_BASE_URL}/scim2/Me`,
               method: "GET",
               headers: {
                 Accept: "application/scim+json"
@@ -121,6 +122,7 @@ function App() {
           <Route path="/services" element={<ServicesPage />} />
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/edit-profile" element={<EditProfile />} />
+          <Route path="/" element={<RoleSelectionPage />} />
 
           
           {/* Only Admins can access this route */}

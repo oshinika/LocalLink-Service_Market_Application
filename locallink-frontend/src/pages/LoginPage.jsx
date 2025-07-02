@@ -20,18 +20,18 @@ function LoginPage() {
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-gray-50 p-4">
-      {/* Login Card */}
+      
       <div className="w-full max-w-md bg-white rounded-2xl shadow-md overflow-hidden">
         
-        {/* Header with Branding */}
+        
         <div className="bg-blue-800 p-6 text-center">
           <h1 className="text-2xl font-bold text-white">Welcome to LocalLink</h1>
           <p className="text-blue-100 mt-2">Secure access to your account</p>
         </div>
 
-        {/* Main Content */}
+        
         <div className="p-8">
-          {/* Simplified Arrow Icon */}
+          
           <div className="flex justify-center mb-6">
             <svg 
               width="48" 
@@ -57,7 +57,6 @@ function LoginPage() {
             </svg>
           </div>
 
-          {/* Login Button */}
           <button
           onClick={handleLogin}
           className="w-full flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-blue font-medium py-3 px-4 rounded-lg transition-colors duration-200"
@@ -65,7 +64,7 @@ function LoginPage() {
           <span>Continue</span>
   
           </button>
-          {/* Divider */}
+          
           <div className="my-6 flex items-center">
             <div className="flex-grow border-t border-gray-200"></div>
             <div className="flex-grow border-t border-gray-200"></div>

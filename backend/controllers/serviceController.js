@@ -2,7 +2,7 @@ import Service from "../models/Service.js";
 import path from "path";
 import fs from "fs";
 
-// GET all services
+
 export const getAllServices = async (req, res) => {
   try {
     const services = await Service.find().sort({ createdAt: -1 });
@@ -13,7 +13,7 @@ export const getAllServices = async (req, res) => {
   }
 };
 
-// POST create new service
+
 export const createService = async (req, res) => {
   try {
     const { title, description, provider_user_id } = req.body;
@@ -42,7 +42,7 @@ export const createService = async (req, res) => {
   }
 };
 
-// PUT update existing service
+
 export const updateService = async (req, res) => {
   try {
     const { id } = req.params;
@@ -82,7 +82,7 @@ export const updateService = async (req, res) => {
   }
 };
 
-// DELETE service
+
 export const deleteService = async (req, res) => {
   try {
     const { id } = req.params;
