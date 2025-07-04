@@ -1,6 +1,9 @@
 function Footer() {
   return (
-    <footer className="bg-blue-800 text-white text-center py-2 shadow-inner mt-auto">
+    <footer
+      className="text-white text-center py-2 shadow-inner mt-auto"
+      style={{ backgroundColor: "#006400" }}
+    >
       © {new Date().getFullYear()} LocalLink. All rights reserved.
     </footer>
   );

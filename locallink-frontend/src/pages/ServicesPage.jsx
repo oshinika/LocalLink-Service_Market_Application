@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import { useAuthContext } from "@asgardeo/auth-react";
 import AddServiceForm from "../components/AddServiceForm";
@@ -6,7 +5,6 @@ import Footer from "../components/Footer";
 
 function ServicesPage() {
   const { getDecodedIDToken, getAccessToken, state } = useAuthContext();
-  
 
   const [profile, setProfile] = useState({});
   const [roles, setRoles] = useState([]);
@@ -14,12 +12,11 @@ function ServicesPage() {
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
   const [editingService, setEditingService] = useState(null);
-  
+
   useEffect(() => {
     const fetchUser = async () => {
       try {
         const token = await getDecodedIDToken();
-        console.log("Access Token:",token);
         setProfile({
           email: token?.email || token?.username || "Not Set",
           username: token?.username || token?.email?.split("@")[0] || "Provider",
@@ -144,49 +141,26 @@ function ServicesPage() {
   }
 
   const blueButtonClass = {
-  backgroundColor: "#1D4ED8", 
-  color: "white",
-  fontWeight: "600",
-  padding: "8px 16px",
-  borderRadius: "0.5rem",
-  boxShadow: "0 1px 3px rgba(0,0,0,0.2)",
-  border: "none",
-  cursor: "pointer",
-};
-
-
+    backgroundColor: "#006400",
+    color: "white",
+    fontWeight: "600",
+    padding: "8px 16px",
+    borderRadius: "0.5rem",
+    boxShadow: "0 1px 3px rgba(0,0,0,0.2)",
+    border: "none",
+    cursor: "pointer",
+  };
 
   return (
-    <div className="flex flex-col min-h-screen bg-gray-50">
+    <div className="relative flex flex-col min-h-screen bg-gray-50 pb-16"> {/* pb-16 for footer spacing */}
       <main className="flex-grow container mx-auto px-4 py-8">
-        <div className="flex justify-between items-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-800">
-            {isServiceProvider ? "Your Services" : "Available Services"}
-          </h1>
-
+        <div className="flex justify-end items-center mb-8">
           {isServiceProvider && !showForm && (
-            <button
-              onClick={() => setShowForm(true)}
-              style={blueButtonClass}
-            >
+            <button onClick={() => setShowForm(true)} style={blueButtonClass}>
               Add Service
             </button>
           )}
         </div>
-
-        {showForm && (
-          <div className="mb-8 bg-white rounded-lg shadow-lg p-6 max-w-3xl mx-auto">
-            <AddServiceForm
-              initialData={editingService}
-              onCancel={() => {
-                setShowForm(false);
-                setEditingService(null);
-              }}
-              onSubmit={handleFormSubmit}
-              onDelete={handleDeleteService}
-            />
-          </div>
-        )}
 
         {services.length === 0 ? (
           <div className="text-center py-12">
@@ -199,7 +173,7 @@ function ServicesPage() {
             {isServiceProvider && (
               <button
                 onClick={() => setShowForm(true)}
-                className={`mt-6 ${blueButtonClass}`}
+                style={{ ...blueButtonClass, marginTop: "1.5rem" }}
               >
                 Add Your First Service
               </button>
@@ -212,7 +186,7 @@ function ServicesPage() {
                 key={service._id}
                 className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300"
               >
-                <div className="relative h-48 overflow-hidden">
+                <div className="relative h-32 overflow-hidden">
                   {service.photo ? (
                     <img
                       src={`http://localhost:5000${service.photo}`}
@@ -221,49 +195,69 @@ function ServicesPage() {
                     />
                   ) : (
                     <div className="w-full h-full bg-gray-200 flex items-center justify-center">
-                      <span className="text-gray-400">No Image</span>
+                      <span className="text-gray-400 text-sm">No Image</span>
                     </div>
                   )}
                 </div>
-                <div className="p-6">
-                  <h3 className="text-xl font-semibold text-gray-800 mb-2">
+                <div className="p-4">
+                  <h3 className="text-lg font-semibold text-gray-800 mb-1">
                     {service.title}
                   </h3>
-                  <p className="text-gray-600 mb-4">{service.description}</p>
-                  <div className="text-sm text-gray-700 mb-4">
+                  <p className="text-gray-600 text-sm mb-2">{service.description}</p>
+                  <div className="text-xs text-gray-700 mb-2">
                     Provider:{" "}
                     {service.provider_username ||
                       service.provider_user_id?.split("@")[0] ||
                       "Unknown"}
                   </div>
 
-                  {isServiceProvider &&
-                    service.provider_user_id === profile.email && (
-                      <div className="flex space-x-2">
-                        <button
-                          onClick={() => {
-                            setEditingService(service);
-                            setShowForm(true);
-                          }}
-                          style={blueButtonClass}
-                        >
-                          Edit
-                        </button>
-                        <button
-                          onClick={() => handleDeleteService(service._id)}
-                          style={blueButtonClass}
-                        >
-                          Delete
-                        </button>
-                      </div>
-                    )}
+                  {isServiceProvider && service.provider_user_id === profile.email && (
+                    <div className="flex space-x-2">
+                      <button
+                        onClick={() => {
+                          setEditingService(service);
+                          setShowForm(true);
+                        }}
+                        style={blueButtonClass}
+                      >
+                        Edit
+                      </button>
+                      <button
+                        onClick={() => handleDeleteService(service._id)}
+                        style={blueButtonClass}
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  )}
                 </div>
               </div>
             ))}
           </div>
         )}
       </main>
-      <Footer />
+
+      {/* Modal overlay for AddServiceForm */}
+      {showForm && (
+        <div className="fixed inset-0 bg-black bg-opacity-40 z-50 flex justify-center items-center">
+          <div className="bg-white rounded-xl shadow-xl p-6 w-full max-w-2xl mx-4">
+            <AddServiceForm
+              initialData={editingService}
+              onCancel={() => {
+                setShowForm(false);
+                setEditingService(null);
+              }}
+              onSubmit={handleFormSubmit}
+              onDelete={handleDeleteService}
+            />
+          </div>
+        </div>
+      )}
+
+      {/* Fixed Footer */}
+      <div className="fixed bottom-0 left-0 right-0">
+        <Footer />
+      </div>
     </div>
   );
 }

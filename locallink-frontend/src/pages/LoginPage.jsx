@@ -41,6 +41,7 @@ function LoginPage() {
               xmlns="http://www.w3.org/2000/svg"
               className="text-blue-500"
             >
+              
               <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2"/>
               <path 
                 d="M12 8L16 12L12 16" 

@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from "react";
 import { useAuthContext } from "@asgardeo/auth-react";
 
@@ -8,7 +9,6 @@ function AdminUserPage() {
   const [error, setError] = useState(null);
   const [hasAdminAccess, setHasAdminAccess] = useState(false);
 
-  // Check if roles or groups contain admin (case insensitive)
   function checkAdminRole(token) {
     if (!token) return false;
     const roles = token.roles || [];
@@ -41,7 +41,6 @@ function AdminUserPage() {
         setLoadingUsers(true);
         const accessToken = await getAccessToken();
 
-        // Use full backend URL here:
         const response = await fetch("http://localhost:5000/api/admin/asgardeo-users", {
           headers: {
             Authorization: `Bearer ${accessToken}`,
@@ -84,47 +83,52 @@ function AdminUserPage() {
   }
 
   return (
-    <div className="p-8">
-      <h1 className="text-2xl font-bold mb-6">Admin User Page</h1>
+    <div className="p-8 bg-gray-100 min-h-screen">
+      <div className="max-w-6xl mx-auto bg-white shadow-md rounded-lg p-6">
+        <h1 className="text-3xl font-bold mb-6 text-center text-blue-800">
+          Admin - User Management
+        </h1>
 
-      {loadingUsers && <p>Loading users...</p>}
-
-      {!loadingUsers && users.length === 0 && <p>No users found.</p>}
-
-      {!loadingUsers && users.length > 0 && (
-        <table className="min-w-full border border-gray-300">
-          <thead>
-            <tr className="bg-gray-100">
-              <th className="border px-4 py-2">ID</th>
-              <th className="border px-4 py-2">Username</th>
-              <th className="border px-4 py-2">Email</th>
-              <th className="border px-4 py-2">First Name</th>
-              <th className="border px-4 py-2">Last Name</th>
-              <th className="border px-4 py-2">Roles</th>
-              <th className="border px-4 py-2">Phone</th>
-              <th className="border px-4 py-2">Country</th>
-            </tr>
-          </thead>
-          <tbody>
-            {users.map((user) => (
-              <tr key={user.id || user.userId || user.email}>
-                <td className="border px-4 py-2">{user.id || user.userId || "-"}</td>
-                <td className="border px-4 py-2">{user.username || "-"}</td>
-                <td className="border px-4 py-2">{user.email || "-"}</td>
-                <td className="border px-4 py-2">{user.firstName || "-"}</td>
-                <td className="border px-4 py-2">{user.lastName || "-"}</td>
-                <td className="border px-4 py-2">
-                  {(user.roles && user.roles.length > 0)
-                    ? user.roles.join(", ")
-                    : "-"}
-                </td>
-                <td className="border px-4 py-2">{user.phone || "-"}</td>
-                <td className="border px-4 py-2">{user.country || "-"}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      )}
+        {loadingUsers ? (
+          <div className="text-center text-gray-600">Loading users...</div>
+        ) : users.length === 0 ? (
+          <div className="text-center text-gray-600">No users found.</div>
+        ) : (
+          <div className="overflow-x-auto">
+            <table className="min-w-full border border-gray-300 text-sm text-left">
+              <thead className="bg-blue-50 text-blue-800">
+                <tr>
+                  <th className="px-4 py-2 border">Username</th>
+                  <th className="px-4 py-2 border">Email</th>
+                  <th className="px-4 py-2 border">First Name</th>
+                  <th className="px-4 py-2 border">Last Name</th>
+                  <th className="px-4 py-2 border">Phone</th>
+                  <th className="px-4 py-2 border">Roles</th>
+                </tr>
+              </thead>
+              <tbody className="bg-white text-gray-700">
+                {users.map((user, index) => (
+                  <tr
+                    key={user.username || index}
+                    className="hover:bg-gray-50 transition"
+                  >
+                    <td className="px-4 py-2 border">{user.username || "-"}</td>
+                    <td className="px-4 py-2 border">{user.email || "-"}</td>
+                    <td className="px-4 py-2 border">{user.firstName || "-"}</td>
+                    <td className="px-4 py-2 border">{user.lastName || "-"}</td>
+                    <td className="px-4 py-2 border">{user.phone || "-"}</td>
+                    <td className="px-4 py-2 border">
+                      {(user.roles && user.roles.length > 0)
+                        ? user.roles.join(", ")
+                        : "-"}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </div>
     </div>
   );
 }

@@ -24,8 +24,11 @@ const config = {
     "internal_user_mgt_list",
     "internal_user_mgt_delete",
     "internal_role_mgt_update",
+    "internal_role_mgt_create",
+    "internal_role_mgt_view",
     "scim2",
-    "scim2:User.write"
+    "scim2:User.write",
+    "internal_scim2"
   ],
   resourceServerURLs: [
     "https://api.asgardeo.io/t/orgshzcc/scim2"

@@ -1,4 +1,7 @@
 
+
+
+
 import express from "express";
 import axios from "axios";
 
@@ -35,21 +38,37 @@ router.patch("/update", async (req, res) => {
     const accessToken = req.headers.authorization?.split(" ")[1];
     if (!accessToken) return res.status(401).json({ message: "Access token missing" });
 
+    const { givenName, familyName, contactNumber } = req.body;
+
     const patchBody = {
       schemas: ["urn:ietf:params:scim:api:messages:2.0:PatchOp"],
       Operations: [
         {
           op: "replace",
           path: "name.givenName",
-          value: req.body.givenName,
+          value: givenName,
         },
         {
           op: "replace",
           path: "name.familyName",
-          value: req.body.familyName,
+          value: familyName,
         },
       ],
     };
+
+    // ✅ Add contact number only if provided
+    if (contactNumber) {
+      patchBody.Operations.push({
+        op: "replace",
+        path: "phoneNumbers",
+        value: [
+          {
+            type: "mobile",
+            value: contactNumber,
+          },
+        ],
+      });
+    }
 
     const response = await axios.patch(
       `https://api.asgardeo.io/t/${process.env.ASGARDEO_ORG}/scim2/Me`,

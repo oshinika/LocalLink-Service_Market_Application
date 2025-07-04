@@ -10,7 +10,9 @@ import adminRouter from "./routes/admin.js";
 import serviceRoutes from "./routes/serviceRoutes.js";
 import profileRouter from "./routes/profile.js";
 import { checkJwt } from "./middleware/auth.js";
-import assignRoleRoute from "./routes/assign-role.js";
+import roleRoutes from "./routes/roles.js";
+
+
 
 dotenv.config();
 
@@ -36,7 +38,8 @@ app.use("/api/admin", adminRouter);
 
 app.use("/api/profile", profileRouter);
 
-app.use("/api", assignRoleRoute);
+app.use("/api/roles", roleRoutes);
+
 
 
 // Root route for sanity check
