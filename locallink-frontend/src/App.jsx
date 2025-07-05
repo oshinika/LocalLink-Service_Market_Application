@@ -170,7 +170,7 @@ function App() {
   const [loadingRoles, setLoadingRoles] = useState(true);
   const location = useLocation();
 
-  const VALID_ROLES = ["customer", "service_provider", "admin"];
+  const VALID_ROLES = ["customer", "serviceprovider", "admin"];
 
   useEffect(() => {
     const fetchRoles = async () => {

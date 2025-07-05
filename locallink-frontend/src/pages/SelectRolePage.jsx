@@ -1,27 +1,31 @@
-// src/pages/SelectRolePage.jsx
+
+
+
+
 
 import { useAuthContext } from "@asgardeo/auth-react";
 import { useState } from "react";
-import { assignRole } from "./services/roleService";
-import { useNavigate } from "react-router-dom";
+import { assignRole } from "./services/roleService"; // ✅ Update path if needed
 
 function SelectRolePage() {
-  const { getAccessToken } = useAuthContext();
+  const { getAccessToken, signOut } = useAuthContext();
   const [selectedRole, setSelectedRole] = useState("");
   const [submitting, setSubmitting] = useState(false);
-  const navigate = useNavigate();
 
   const handleRoleSelect = async () => {
     if (!selectedRole) return alert("Please select a role!");
 
     try {
       setSubmitting(true);
-      const userToken = await getAccessToken();
 
-      await assignRole(selectedRole, userToken); 
+      const accessToken = await getAccessToken();
+      await assignRole(selectedRole, accessToken);
 
-      alert("✅ Role assigned successfully");
-      window.location.reload(); 
+      alert("✅ Role assigned successfully. Please log in again to continue.");
+      
+      // 🔁 Force logout → will redirect to login page
+      await signOut();
+
     } catch (err) {
       console.error("❌ Failed to assign role:", err);
       alert("Failed to assign role. Check console for details.");
@@ -69,7 +73,3 @@ function SelectRolePage() {
 }
 
 export default SelectRolePage;
-
-
-
-
