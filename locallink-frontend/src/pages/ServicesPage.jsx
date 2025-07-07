@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { useAuthContext } from "@asgardeo/auth-react";
 import AddServiceForm from "../components/AddServiceForm";
-import Footer from "../components/Footer";
 
 function ServicesPage() {
   const { getDecodedIDToken, getAccessToken, state } = useAuthContext();
@@ -135,7 +134,6 @@ function ServicesPage() {
         <main className="flex-grow container mx-auto px-4 py-8">
           <p>Loading...</p>
         </main>
-        <Footer />
       </div>
     );
   }
@@ -152,7 +150,7 @@ function ServicesPage() {
   };
 
   return (
-    <div className="relative flex flex-col min-h-screen bg-gray-50 pb-16"> {/* pb-16 for footer spacing */}
+    <div className="relative flex flex-col min-h-screen bg-gray-50">
       <main className="flex-grow container mx-auto px-4 py-8">
         <div className="flex justify-end items-center mb-8">
           {isServiceProvider && !showForm && (
@@ -253,14 +251,8 @@ function ServicesPage() {
           </div>
         </div>
       )}
-
-      {/* Fixed Footer */}
-      <div className="fixed bottom-0 left-0 right-0">
-        <Footer />
-      </div>
     </div>
   );
 }
 
 export default ServicesPage;
-

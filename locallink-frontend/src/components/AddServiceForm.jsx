@@ -41,6 +41,18 @@ export default function AddServiceForm({ onCancel, onSubmit, onDelete, initialDa
     });
   };
 
+  const blueButtonClass = {
+    backgroundColor: "#006400",
+    color: "white",
+    fontWeight: "600",
+    padding: "8px 16px",
+    borderRadius: "0.5rem",
+    boxShadow: "0 1px 3px rgba(0,0,0,0.2)",
+    border: "none",
+    cursor: "pointer",
+  };
+
+
   return (
     <div className="max-w-xl mx-auto bg-white p-6 rounded shadow-lg mb-6">
       <h2 className="text-xl font-bold mb-4">
@@ -94,13 +106,13 @@ export default function AddServiceForm({ onCancel, onSubmit, onDelete, initialDa
             <button
               type="button"
               onClick={onCancel}
-              className="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400"
+              style = {blueButtonClass}
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+              style = {blueButtonClass}
             >
               {initialData ? "Update" : "Create"}
             </button>
@@ -110,7 +122,7 @@ export default function AddServiceForm({ onCancel, onSubmit, onDelete, initialDa
             <button
               type="button"
               onClick={() => onDelete(initialData._id)}
-              className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
+              style = {blueButtonClass}
             >
               Delete
             </button>
