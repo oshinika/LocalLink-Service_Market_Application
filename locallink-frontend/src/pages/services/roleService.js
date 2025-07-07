@@ -1,8 +1,3 @@
-
-
-
-
-// src/services/roleService.js
 export const assignRole = async (role, accessToken) => {
   const res = await fetch("http://localhost:5000/api/roles/assign", {
     method: "POST",
