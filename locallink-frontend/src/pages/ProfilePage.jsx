@@ -50,7 +50,7 @@ function ProfilePage() {
         const displayRoles = roleData.map((r) => r.display?.toLowerCase() || r?.toLowerCase());
         setRoles(displayRoles);
       } catch (err) {
-        console.error("❌ Failed to load profile:", err.message);
+        console.error("❌ Failed to load profil:", err.message);
       } finally {
         setLoading(false);
       }
