@@ -85,10 +85,7 @@ function AdminUserPage() {
   return (
     <div className="p-8 bg-gray-100 min-h-screen">
       <div className="max-w-6xl mx-auto bg-white shadow-md rounded-lg p-6">
-        <h1 className="text-3xl font-bold mb-6 text-center text-blue-800">
-          Admin - User Management
-        </h1>
-
+        
         {loadingUsers ? (
           <div className="text-center text-gray-600">Loading users...</div>
         ) : users.length === 0 ? (
